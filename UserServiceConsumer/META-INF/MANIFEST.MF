@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Userserviceconsumer
+Bundle-SymbolicName: com.redstream.userserviceconsumer
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.redstream.userserviceconsumer.Activator
+Bundle-Vendor: REDSTREAM
+Bundle-RequiredExecutionEnvironment: JavaSE-18
+Automatic-Module-Name: com.redstream.userserviceconsumer
+Import-Package: com.redstream.usermanagerservice, org.osgi.framework;version="1.3.0"
+Bundle-ActivationPolicy: lazy
