@@ -47,22 +47,29 @@ public class MessageImpl implements IMessage {
 				}
 				case "2": {
 					viewAllMessages();
+					if (messageList.isEmpty()) {
+						System.out.println("You don't have any messages to delete\n");
+						break;
+					} else {
+						System.out.print("Enter Message ID : ");
 
-					System.out.print("Enter Message ID : ");
+						String messageID = reader.readLine();
 
-					String messageID = reader.readLine();
+						// Delete a message by getting message id
+						deleteMessage(messageID);
 
-					// Delete a message by getting message id
-					deleteMessage(messageID);
-
-					System.out.println("Message deleted successfully!\n");
-
-					break;
+						break;
+					}
 				}
 				case "3": {
-					// View all messages
-					viewAllMessages();
-					break;
+					if (messageList.isEmpty()) {
+						System.out.println("You don't have any messages\n");
+						break;
+					} else {
+						// View all messages
+						viewAllMessages();
+						break;
+					}
 				}
 				case "4": {
 					// Exit the loop and cancel the operation
@@ -85,12 +92,14 @@ public class MessageImpl implements IMessage {
 	@Override
 	public boolean deleteMessage(String id) {
 		if (messageList.isEmpty()) {
+			System.out.println("You don't have any messages");
 			return false;
 		} else {
 			// Find the message with the given ID and remove it from the array list
 			for (Message message : messageList) {
 				if (String.valueOf(message.getMessageID()).equals(id)) {
 					messageList.remove(message);
+					System.out.println("Message deleted successfully!\n");
 					return true;
 				}
 			}
@@ -99,9 +108,14 @@ public class MessageImpl implements IMessage {
 	}
 
 	// Get all messages
+	@Override
 	public void viewAllMessages() {
 		for (Message message : messageList) {
-			message.viewMessage();
+			if (messageList.isEmpty()) {
+				System.out.println("You don't have any messages");
+			} else {
+				message.viewMessage();
+			}
 		}
 	}
 
