@@ -19,7 +19,7 @@ public class ServiceActivator implements BundleActivator {
 		messageServiceReference = bundleContext.getServiceReference(IMessage.class.getName());
 		messageService = (IMessage) bundleContext.getService(messageServiceReference);
 
-		System.out.println("Message Subscriber Started");
+		System.out.println("Message Consumer Started!");
 
 		messageService.sendMessage();
 	}
@@ -29,7 +29,7 @@ public class ServiceActivator implements BundleActivator {
 	public void stop(BundleContext bundleContext) throws Exception {
 		bundleContext.ungetService(messageServiceReference);
 
-		System.out.println("Message Subscriber Stopped");
+		System.out.println("Message Consumer Stopped!");
 	}
 
 }
