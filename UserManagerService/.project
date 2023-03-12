@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>FriendsServiceConsumer</name>
+	<name>com.redstream.usermanagerservice</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -27,7 +27,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1678261727087</id>
+			<id>1678210267037</id>
 			<name></name>
 			<type>30</type>
 			<matcher>

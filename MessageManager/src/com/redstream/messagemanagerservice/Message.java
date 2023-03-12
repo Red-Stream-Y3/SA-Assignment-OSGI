@@ -78,9 +78,7 @@ public class Message {
 	}
 
 	public void viewMessage() {
-		System.out.println("\n=========  Messages  ===========");
-		System.out.println(messageID + " " + receiver + ": " + message);
-		System.out.println("==================================\n");
+		System.out.println(" " + messageID + ". " + receiver + ": " + message);
 	}
 
 }

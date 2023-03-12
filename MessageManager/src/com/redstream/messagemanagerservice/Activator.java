@@ -17,14 +17,14 @@ public class Activator implements BundleActivator {
 	// Start method
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
-		System.out.println("Message Publisher Started");
+		System.out.println("Message Producer Started!");
 		serviceRegistration = bundleContext.registerService(IMessage.class.getName(), new MessageImpl(), null);
 	}
 
 	// Stop method
 	public void stop(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
-		System.out.println("Message Publisher Stopped");
+		System.out.println("Message Producer Stopped!");
 		serviceRegistration.unregister();
 	}
 
