@@ -1,6 +1,7 @@
 package com.redstream.postmanagerservice;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -85,7 +86,7 @@ public class PostManagerImpl implements PostManager {
 						default: {
 							//any other value restarts the loop
 							System.out.println("Unexpected value: Enter "
-									+ "1/2/3 or leave empty to cancel");
+									+ "1/2 or leave empty to cancel");
 							continue inputLoop;
 						}
 					}
@@ -95,7 +96,7 @@ public class PostManagerImpl implements PostManager {
 						System.out.println("Cancel!");
 						break inputLoop;
 					} else {
-						System.out.println("Unexpected value: Enter 1/2/3 or leave empty to cancel");
+						System.out.println("Unexpected value: Enter 1/2 or leave empty to cancel");
 					}
 					
 				} 
@@ -106,10 +107,45 @@ public class PostManagerImpl implements PostManager {
 		}
 	}
 	
+	@Override
 	public void displayAllPosts() {
 		//display all posts
+		int index = 1;
 		for(Post p : postList) {
-			p.displayPost();
+			p.displayPost(index++);
+		}
+	}
+	
+	@Override
+	public void deletePost() {
+		BufferedReader reader = new BufferedReader
+				(new InputStreamReader(System.in));
+		String inputString = "";
+		
+		try {
+			inputLoop: while(true) {
+				printDeletePostMenu();
+				
+				//get user input
+				inputString = reader.readLine();
+				
+				if(inputString.length() == 0) {
+					System.out.println("Cancel!");
+					break inputLoop;
+				} else {
+					int deleteIndex = Integer.parseInt(inputString);
+					
+					if(postList.size() < deleteIndex) {
+						System.out.println("Post not found!");
+						continue inputLoop;
+					} else {
+						postList.remove(deleteIndex-1);
+						break inputLoop;
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -117,9 +153,12 @@ public class PostManagerImpl implements PostManager {
 		System.out.println("\n~~~~~~Create a Post~~~~~");
 		System.out.println("1: Photo");
 		System.out.println("2: Text");
-		System.out.println("~~~~~~~View Posts~~~~~~~");
-		System.out.println("3: Display all posts");
 		System.out.print("\nSelect option: ");
+	}
+	
+	private void printDeletePostMenu() {
+		System.out.println("\n~~~~~~~Delete Post~~~~~~");
+		System.out.print("\nEnter post number : ");
 	}
 
 }

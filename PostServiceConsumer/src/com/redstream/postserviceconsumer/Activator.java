@@ -27,10 +27,13 @@ public class Activator implements BundleActivator {
 		//TODO: get user name
 		userReference = context.getServiceReference(IUser.class.getName());
 		IUser user = (IUser) context.getService(userReference);
-		String username = "";//get
+		String username = "heehoo";//get
 		
-		//call the new post method from PostManager
-		postManager.newPost(username);
+		//create consumer
+		Consumer currentConsumer = new Consumer(username, postManager);
+		
+		//start consumer activity
+		currentConsumer.startMenu();
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {
