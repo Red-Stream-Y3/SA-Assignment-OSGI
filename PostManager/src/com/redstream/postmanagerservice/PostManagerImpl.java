@@ -21,7 +21,7 @@ public class PostManagerImpl implements PostManager {
 	}
 	
 	@Override
-	public void newPost() {
+	public void newPost(String username) {
 		
 		BufferedReader reader = new BufferedReader
 				(new InputStreamReader(System.in));
@@ -59,7 +59,7 @@ public class PostManagerImpl implements PostManager {
 									(postList.size()+1), 
 									caption, 
 									photo, 
-									"user1"));
+									username));
 							System.out.println("New Post Saved!");
 							
 							break;
@@ -73,7 +73,7 @@ public class PostManagerImpl implements PostManager {
 							postList.add(new Post(
 									(postList.size()+1), 
 									caption, 
-									"user1"));
+									username));
 							System.out.println("New Post Saved!");
 							
 							break;

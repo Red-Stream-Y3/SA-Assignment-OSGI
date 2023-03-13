@@ -5,11 +5,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import com.redstream.postmanagerservice.PostManager;
+import com.redstream.usermanagerservice.IUser;
 
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;
 	private ServiceReference<?> postReference;
+	private ServiceReference<?> userReference;
 
 	static BundleContext getContext() {
 		return context;
@@ -22,8 +24,13 @@ public class Activator implements BundleActivator {
 		postReference = context.getServiceReference(PostManager.class.getName());
 		PostManager postManager = (PostManager) context.getService(postReference);
 		
+		//TODO: get user name
+		userReference = context.getServiceReference(IUser.class.getName());
+		IUser user = (IUser) context.getService(userReference);
+		String username = "";//get
+		
 		//call the new post method from PostManager
-		postManager.newPost();
+		postManager.newPost(username);
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {
