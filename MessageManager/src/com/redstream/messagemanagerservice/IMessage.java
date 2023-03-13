@@ -3,7 +3,7 @@ package com.redstream.messagemanagerservice;
 public interface IMessage {
 	public void sendMessage();
 
-	public boolean deleteMessage(String id);
+	public void deleteMessage();
 	
 	public void viewAllMessages();
 
