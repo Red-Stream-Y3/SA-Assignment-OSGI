@@ -6,4 +6,6 @@ public interface IUser {
     public void updateUser();
     public void getUser();
     public void getAllUsers();
+    public User login(String username);
+    public String getCurrentUserName();
 }
