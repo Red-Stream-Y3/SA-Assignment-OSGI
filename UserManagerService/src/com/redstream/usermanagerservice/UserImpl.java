@@ -8,6 +8,9 @@ public class UserImpl implements IUser {
     private ArrayList<User> users = new ArrayList<User>(); // User list
     Scanner scan = new Scanner(System.in); // Scanner object
 
+    // current user
+    private User currentUser;
+
     @Override
     public void addUser() {
         System.out.println("================");
@@ -146,6 +149,22 @@ public class UserImpl implements IUser {
                 System.out.println("================");
             }
         }
+    }
+
+    @Override
+    public User login(String username) {
+        for (User user : users) { // Check if user exists
+            if(user.getUsername().equals(username)) {
+                currentUser = user;
+                return currentUser;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getCurrentUserName() {
+        return currentUser.getUsername();
     }
     
 }
