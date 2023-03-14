@@ -1,6 +1,7 @@
 package com.redstream.followerservicemanager;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,57 +20,23 @@ public class FriendsManagerImpl implements FriendsManager{
 	public void addFriend() {
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		
+		System.out.print("Enter User Name : ");
+		String user;
 		try {
-			inputLoop: while (true) {
-				printFriendsMenu();
-				
-				String option = reader.readLine();
-				
-				switch (option) {
-					case "1" : {
-						System.out.print("Enter User Name : ");
-						String user = reader.readLine();
-						
-						if (user != null && !user.trim().isEmpty()) {
-							User newFollower = new User(user);
-							friendList.add(newFollower);
-							friendCount ++ ;
-							
-							System.out.println("\nYou are now friends with " + user);
-							//System.out.println("Now you have " + friendCount + " friends\n");
-							break;
-						} else {
-							System.out.println("Please enter a valid username\n");
-							break;
-						}
-					}
-					case "2" : {
-						if(friendList.isEmpty()) {
-							System.out.println("You don't have any friends to unfriend");
-							break;
-						} else {
-							System.out.print("Enter Username to Unfriend : ");
-							String userN = reader.readLine();
-							removeFriend(userN);
-							break;
-						}				
-					}
-					case "3" : {
-						viewAllFriends();
-						break;	
-					}
-					case "4" : {
-						System.out.println("\nTerminating Program!\n");
-						break inputLoop;
-					}
-					default : {
-						System.out.println("Unexpexted Error!\n");
-						continue inputLoop;
-					}
-				}	
-			}
-			
+			user = reader.readLine();
+
+				if (user != null && !user.trim().isEmpty()) {
+					User newFollower = new User(user);
+					friendList.add(newFollower);
+					friendCount ++ ;
+					
+					System.out.println("\nYou are now friends with " + user);
+					//System.out.println("Now you have " + friendCount + " friends\n");
+	
+				} else {
+					System.out.println("Please enter a valid username\n");					
+				}
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -77,16 +44,7 @@ public class FriendsManagerImpl implements FriendsManager{
 	}
 	
 	
-	private void printFriendsMenu() {
-		System.out.println("\n-------Manage Friends-------\n");
-		System.out.println("1.Add New Friend");
-		System.out.println("2.Remove Friend");
-		System.out.println("3.View All Friends");
-		System.out.println("4.Exit");
-		System.out.print("\nSelect an Option: ");
-	}
-
-
+	@Override
 	public void viewAllFriends() {
 		if(friendList.isEmpty()) {
 			System.out.println("You don't have any friends");
@@ -101,18 +59,38 @@ public class FriendsManagerImpl implements FriendsManager{
 		}	
 	}
 
-	public void removeFriend(String userName) {
-		Iterator<User> iterator = friendList.iterator();
-		 while (iterator.hasNext()) {
-		        User frnd = iterator.next();
-		        if (String.valueOf(frnd.getUserName()).equals(userName)) {
-		            iterator.remove();
-		            friendCount--;
-		            System.out.println("You are no longer friends with " + userName);
-		            return;
-		        }
-		    }
-		    System.out.println("Could not find a friend with the username " + "'" + userName + "'");
+	@Override
+	public void removeFriend() {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		
+		if(friendList.isEmpty()) {
+			System.out.println("You don't have any friends to unfriend");
+		} else {
+			viewAllFriends();
+			System.out.print("\nEnter username to unfriend : ");
+			String userN;
+			
+			try {
+				userN = reader.readLine();
+				Iterator<User> iterator = friendList.iterator();
+				 while (iterator.hasNext()) {
+				        User frnd = iterator.next();
+				        if (String.valueOf(frnd.getUserName()).equals(userN)) {
+				            iterator.remove();
+				            friendCount--;
+				            System.out.println("You are no longer friends with " + userN);
+				            return;
+				        }
+				    }
+				    System.out.println("Could not find a friend with the username " + "'" + userN + "'");
+			}
+			 catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		
+	}
 	}
 	
 	
