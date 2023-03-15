@@ -1,25 +1,11 @@
 package com.redstream.messagemanagerservice;
 
-import java.util.ArrayList;
-
 public class Message {
 	// Declare variables
 	private int messageID;
 	private String message;
 	private String sender;
 	private String receiver;
-
-	/**
-	 * @param messageID
-	 * @param message
-	 * @param receiver
-	 */
-	public Message(int messageID, String receiver, String message) {
-		super();
-		this.messageID = messageID;
-		this.message = message;
-		this.receiver = receiver;
-	}
 
 	/**
 	 * @return the messageID
