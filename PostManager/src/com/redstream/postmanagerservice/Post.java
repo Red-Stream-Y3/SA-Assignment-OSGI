@@ -70,4 +70,13 @@ public class Post {
 		System.out.println("====================\n");
 	}
 	
+	public void displayPost(int index) {
+		System.out.println("\n====================");
+		System.out.println("Post/"+index+" | user/"+username);
+		System.out.println(text);
+		System.out.println("--------------------");
+		System.out.println(photo);
+		System.out.println("====================\n");
+	}
+	
 }

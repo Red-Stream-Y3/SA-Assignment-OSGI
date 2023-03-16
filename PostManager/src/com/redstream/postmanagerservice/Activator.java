@@ -22,6 +22,7 @@ public class Activator implements BundleActivator {
 				PostManager.class.getName(), 
 				postManager, 
 				null);
+		System.out.println("Post Service Registered!");
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {
