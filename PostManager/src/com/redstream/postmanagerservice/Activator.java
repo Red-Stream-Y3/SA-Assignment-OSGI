@@ -24,7 +24,7 @@ public class Activator implements BundleActivator {
 			//create a database connection
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/sa_social_media","root","");
+					"jdbc:mysql://localhost:3306/socialmediadb","root","");
 			
 			System.out.println("Post Manager Connected to DB!");
 			//register the post manager service

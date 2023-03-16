@@ -5,13 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import com.redstream.postmanagerservice.PostManager;
+import com.redstream.usermanagerservice.IUser;
 
 public class Consumer {
-	private String username;
+	private IUser userService;
 	private PostManager postManager;
 	
-	public Consumer(String name, PostManager postManager) {
-		this.username = name;
+	public Consumer(IUser userService, PostManager postManager) {
+		this.userService = userService;
 		this.postManager = postManager;
 	}
 	
@@ -30,8 +31,16 @@ public class Consumer {
 				
 				switch (inputString) {
 					case "1":{//create new post
+						//check if user is logged in
+						String username = userService.getCurrentUserName();
+						
+						if(username == null) {
+							userService.login(); //user must login first
+							username = userService.getCurrentUserName();
+						}
+						
 						//call new post method from post manager module
-						postManager.newPost(this.username);
+						postManager.newPost(username);
 						break;
 					}
 					case "2": {//view all posts
