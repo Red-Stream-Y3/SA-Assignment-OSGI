@@ -99,13 +99,17 @@ public class Post {
 			likeList += s+",";
 		}
 		
-		String query = "INSERT INTO posts (postID, username, text, photo, liked-users) "
-				+ "VALUES ("+this.postID+","
-				+ this.username+","
-				+ this.text+","
-				+ this.photo+","
-				+ likeList+")";
+		String query = "INSERT INTO posts (postID, username, text, photo, liked_users) "
+				+ "VALUES ('"+this.postID+"','"
+				+ this.username+"','"
+				+ this.text+"','"
+				+ this.photo+"','"
+				+ likeList+"')";
 		
 		return query;
+	}
+	
+	public String getDeleteQuery() {
+		return "DELETE FROM posts WHERE postID='"+this.postID+"'";
 	}
 }

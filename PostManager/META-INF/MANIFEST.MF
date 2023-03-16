@@ -4,6 +4,8 @@ Bundle-Name: PostManagerService
 Bundle-SymbolicName: com.redstream.PostManagerService
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.redstream.postmanagerservice.Activator
+Bundle-ClassPath: mysql-connector-j-8.0.31.jar,
+ .
 Bundle-Vendor: REDSTREAM
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: com.redstream.PostManagerService

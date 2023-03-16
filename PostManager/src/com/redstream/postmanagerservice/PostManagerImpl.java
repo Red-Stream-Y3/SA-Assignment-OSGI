@@ -20,30 +20,30 @@ public class PostManagerImpl implements PostManager {
 	private ServiceReference<?> cameraServiceReference;
 	private CameraProvider cameraProvider;
 	private BundleContext context = Activator.getContext();
-	//private Connection conn;
+	private Connection conn;
 	
 	private String GET_POSTS = "SELECT * FROM posts";
 	
-	public PostManagerImpl(/*Connection conn*/) {
+	public PostManagerImpl(Connection conn) {
 		this.postList = new ArrayList<>();
-		//this.conn = conn;
+		this.conn = conn;
 		
-//		try {
-//			Statement stmt = conn.createStatement();
-//			ResultSet res = stmt.executeQuery(GET_POSTS);
-//			
-//			while(res.next()) {
-//				Post p = new Post(
-//						res.getInt(0), //post ID
-//						res.getString(2), //text
-//						res.getString(3), //photo
-//						res.getString(1), //user name
-//						res.getString(4)); //likes
-//				postList.add(p);
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet res = stmt.executeQuery(GET_POSTS);
+			
+			while(res.next()) {
+				Post p = new Post(
+						res.getInt(1), //post ID
+						res.getString(3), //text
+						res.getString(4), //photo
+						res.getString(2), //user name
+						res.getString(5)); //likes
+				postList.add(p);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -63,7 +63,10 @@ public class PostManagerImpl implements PostManager {
 				String photo = "";
 				
 				if (inputString.length() == 1) {
-					switch (inputString) {
+					Post post;
+					boolean success = false;
+					
+					checkInput: switch (inputString) {
 						case "1": {
 							//get a photo from camera provider
 							System.out.println("Calling Camera Provider...");
@@ -76,19 +79,21 @@ public class PostManagerImpl implements PostManager {
 							photo = cameraProvider.takePhoto();
 							
 							//get text input for caption
+							System.out.println(photo);
 							System.out.println("Photo Taken!");
 							System.out.print("\nEnter photo caption: ");
 							caption = reader.readLine();
 							
 							//create a post object
-							postList.add(new Post(
-									(postList.size()+1), 
+							post = new Post(
+									(postList.get(postList.size()-1).getPostID() +1), 
 									caption, 
 									photo, 
-									username));
-							System.out.println("New Post Saved!");
+									username);
+							postList.add(post);
 							
-							break;
+							success = true;
+							break checkInput;
 						}
 						case "2": {
 							//get input
@@ -96,17 +101,14 @@ public class PostManagerImpl implements PostManager {
 							caption = reader.readLine();
 							
 							//create a post object
-							postList.add(new Post(
-									(postList.size()+1), 
+							post = new Post(
+									(postList.get(postList.size()-1).getPostID() +1), 
 									caption, 
-									username));
-							System.out.println("New Post Saved!");
+									username);
+							postList.add(post);
 							
-							break;
-						}
-						case "3": {
-							displayAllPosts();
-							break;
+							success = true;
+							break checkInput;
 						}
 						default: {
 							//any other value restarts the loop
@@ -114,7 +116,17 @@ public class PostManagerImpl implements PostManager {
 									+ "1/2 or leave empty to cancel");
 							continue inputLoop;
 						}
+					}// end of switch
+					
+					if(success) {//save the post in DB
+						String query = post.getSaveQuery();
+						
+						Statement st = conn.createStatement();
+						if(st.executeUpdate(query)>0) {
+							System.out.println("New Post Saved!");
+						}
 					}
+					
 				} else {
 					//exit / error
 					if(inputString.length() == 0) {
@@ -164,6 +176,18 @@ public class PostManagerImpl implements PostManager {
 						System.out.println("Post not found!");
 						continue inputLoop;
 					} else {
+						//delete from DB
+						String query = postList.get(deleteIndex-1).getDeleteQuery();
+						try {
+							Statement st = conn.createStatement();
+							if(st.executeUpdate(query)>0) {
+								System.out.println("Post deleted!");
+							}
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						
+						
 						postList.remove(deleteIndex-1);
 						break inputLoop;
 					}

@@ -20,24 +20,26 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
 		
-		//try {
+		try {
 			//create a database connection
-			//Class.forName("com.mysql.jdbc.Driver");
-			//Connection conn = DriverManager.getConnection(
-			//		"jdbc:mysql://localhost:3306/sa_social_media","root","root");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/sa_social_media","root","");
 			
+			System.out.println("Post Manager Connected to DB!");
 			//register the post manager service
-			PostManager postManager = new PostManagerImpl(/*conn*/);
-			serviceRegistration = bundleContext.registerService(
+			PostManager postManager = new PostManagerImpl(conn);
+			serviceRegistration = context.registerService(
 					PostManager.class.getName(), 
 					postManager, 
 					null);
 			System.out.println("Post Service Registered!");
-		//} catch (ClassNotFoundException e) {
-		//	e.printStackTrace();
-		//} catch (SQLException e) {
-		//	e.printStackTrace();
-		//}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
