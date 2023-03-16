@@ -38,64 +38,57 @@ public class Activator implements BundleActivator {
 	private void showUserManagerCLI(IUser userService) {
 
 		int choice = 0;
-		Scanner scan = new Scanner(System.in);
-		
-		System.out.println("================");
-		System.out.println("User Manager CLI");
-		System.out.println("================");
-		System.out.println("================");
-		System.out.println("Please Login to continue");
-		System.out.println("================");
-		userService.login();
+		Scanner scanner = new Scanner(System.in);
+		boolean loginStatus = false;
+		boolean logoutStatus = false;
 
-		System.out.println("================");
-		System.out.println("User Manager CLI");
-		System.out.println("================");
-		System.out.println("1. Add User");
-		System.out.println("2. Delete User");
-		System.out.println("3. Update User");
-		System.out.println("4. Get User");
-		System.out.println("5. Get All Users");
-		System.out.println("6. Exit");
-		System.out.println("================");
-		System.out.println("Enter your choice: ");
-
-		try{
-			choice = Integer.parseInt(scan.nextLine().trim());
-		} catch (NumberFormatException e) { // Catch invalid input
-			System.out.println("================");
-			System.out.println("Invalid choice");
-			System.out.println("================");
-			showUserManagerCLI(userService);
+		while (loginStatus == false) {
+			loginStatus = userService.login();
 		}
 
-		switch (choice) {
-		case 1:
-			userService.addUser();
-			break;
-		case 2:
-			userService.deleteUser();
-			break;
-		case 3:
-			userService.updateUser();
-			break;
-		case 4:
-			userService.getUser();
-			break;
-		case 5:
-			userService.getAllUsers();
-			break;
-		case 6:
-			scan.close();
-			System.exit(0);
-			break;
-		default:
-			System.out.println("Invalid choice");
-			break;
+		inputLoop: while (true) {
+			System.out.println("==============");
+			System.out.println("User Dashboard");
+			System.out.println("==============");
+			System.out.println("1. View Account");
+			System.out.println("2. Edit Account");
+			System.out.println("3. Delete Account");
+			System.out.println("4. Search Users");
+			System.out.println("5. Register New User");
+			System.out.println("6. LogOut");
+			System.out.print("Enter your choice: ");
+			choice = scanner.nextInt();
+
+			switch (choice) {
+			case 1:
+				userService.getUser();
+				break;
+			case 2:
+				userService.updateUser();
+				break;
+			case 3:
+				logoutStatus = userService.deleteUser();
+				break;
+			case 4:
+				userService.getAllUsers();
+				break;
+			case 5:
+				userService.addUser();
+				break;
+			case 6:
+				logoutStatus = userService.logout();
+				scanner.close();
+				System.exit(0);
+			default:
+				System.out.println("Invalid choice");
+				break inputLoop;
+			}
+
+			if(logoutStatus == true) {
+				System.exit(0);
+			}
 		}
 
-		System.out.println("================");
-		showUserManagerCLI(userService); // Show CLI again
 		
 	}
 
