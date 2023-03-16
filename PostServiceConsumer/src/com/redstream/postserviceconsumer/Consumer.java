@@ -10,10 +10,12 @@ import com.redstream.usermanagerservice.IUser;
 public class Consumer {
 	private IUser userService;
 	private PostManager postManager;
+	private static String username;
 	
 	public Consumer(IUser userService, PostManager postManager) {
 		this.userService = userService;
 		this.postManager = postManager;
+		username = null;
 	}
 	
 	public void startMenu() {
@@ -32,11 +34,15 @@ public class Consumer {
 				switch (inputString) {
 					case "1":{//create new post
 						//check if user is logged in
-						String username = userService.getCurrentUserName();
+						try {
+							Consumer.username = userService.getCurrentUserName();
+						} catch (NullPointerException e) {
+							System.out.println("Not logged in!");
+						}
 						
-						if(username == null) {
+						if(Consumer.username == null) {
 							userService.login(); //user must login first
-							username = userService.getCurrentUserName();
+							Consumer.username = userService.getCurrentUserName();
 						}
 						
 						//call new post method from post manager module
