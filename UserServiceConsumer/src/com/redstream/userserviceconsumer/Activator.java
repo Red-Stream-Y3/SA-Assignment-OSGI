@@ -21,9 +21,8 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception { // Start bundle
 		Activator.context = bundleContext;
 		
-		userServiceReference = bundleContext.getServiceReference(IUser.class.getName());
-		IUser userService = (IUser) context.getService(userServiceReference);
-
+		userServiceReference = bundleContext.getServiceReference(IUser.class.getName()); // Get service reference
+		IUser userService = (IUser) bundleContext.getService(userServiceReference); // Get service object
 		System.out.println("LOG - User Subscriber Started");
 
 		showUserManagerCLI(userService);
@@ -40,6 +39,14 @@ public class Activator implements BundleActivator {
 
 		int choice = 0;
 		Scanner scan = new Scanner(System.in);
+		
+		System.out.println("================");
+		System.out.println("User Manager CLI");
+		System.out.println("================");
+		System.out.println("================");
+		System.out.println("Please Login to continue");
+		System.out.println("================");
+		userService.login();
 
 		System.out.println("================");
 		System.out.println("User Manager CLI");

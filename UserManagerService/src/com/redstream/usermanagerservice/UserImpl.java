@@ -9,7 +9,7 @@ public class UserImpl implements IUser {
     Scanner scan = new Scanner(System.in); // Scanner object
 
     // current user
-    private User currentUser;
+   private User currentUser;
 
     @Override
     public void addUser() {
@@ -152,14 +152,24 @@ public class UserImpl implements IUser {
     }
 
     @Override
-    public User login(String username) {
-        for (User user : users) { // Check if user exists
+    public boolean login() {
+        System.out.println("================");
+        System.out.println("Login");
+        System.out.println("================");
+        System.out.println("Enter User Name: ");
+        String username = scan.nextLine().trim();
+
+        /*for (User user : users) { // Check if user exists
             if(user.getUsername().equals(username)) {
                 currentUser = user;
-                return currentUser;
+                return true;
             }
         }
-        return null;
+        return false;*/
+        System.out.println("================");
+		System.out.println("User : " + username);
+		System.out.println("================");
+		return true;
     }
 
     @Override

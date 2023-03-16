@@ -10,7 +10,7 @@ public class CameraProviderImpl implements CameraProvider {
 		
 		switch (num){
 			case 0: {
-				photo = "¯\\_(UwU)_/¯";
+				photo = "\\_(UwU)_/";
 				break;
 			}
 			case 1: {
