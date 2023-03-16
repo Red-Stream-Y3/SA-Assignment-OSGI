@@ -24,13 +24,12 @@ public class Activator implements BundleActivator {
 		postReference = context.getServiceReference(PostManager.class.getName());
 		PostManager postManager = (PostManager) context.getService(postReference);
 		
-		//TODO: get user name
+		//get user service
 		userReference = context.getServiceReference(IUser.class.getName());
 		IUser user = (IUser) context.getService(userReference);
-		String username = "sam";//get
 		
 		//create consumer
-		Consumer currentConsumer = new Consumer(username, postManager);
+		Consumer currentConsumer = new Consumer(user, postManager);
 		
 		//start consumer activity
 		currentConsumer.startMenu();
