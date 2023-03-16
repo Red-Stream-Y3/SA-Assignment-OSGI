@@ -9,6 +9,7 @@ public class Post {
 	private String photo;
 	private ArrayList<String> likedUsers;
 	
+	//create new post with photo
 	public Post(int postID, String text, String photo, String username) {
 		this.postID = postID;
 		this.text = text;
@@ -17,10 +18,22 @@ public class Post {
 		likedUsers = new ArrayList<>();
 	}
 	
+	//get existing post with photo from DB
+	public Post(int postID, String text, String photo, String username, String likes) {
+		this.postID = postID;
+		this.text = text;
+		this.photo = photo;
+		this.username = username;
+		likedUsers = new ArrayList<>();
+		
+		//TODO:add likes
+	}
+	
+	//create new post with text
 	public Post(int postID, String text, String username) {
 		this.postID = postID;
 		this.text = text;
-		this.photo = "********************";
+		this.photo = "";
 		this.username = username;
 		likedUsers = new ArrayList<>();
 	}
@@ -66,7 +79,7 @@ public class Post {
 		System.out.println("\n====================");
 		System.out.println(username+": "+text);
 		System.out.println("--------------------");
-		System.out.println(photo);
+		System.out.println(photo.length()==0 ? "********************" : photo);
 		System.out.println("====================\n");
 	}
 	
@@ -79,4 +92,20 @@ public class Post {
 		System.out.println("====================\n");
 	}
 	
+	public String getSaveQuery() {
+		String likeList = "";
+		
+		for(String s : this.likedUsers) {
+			likeList += s+",";
+		}
+		
+		String query = "INSERT INTO posts (postID, username, text, photo, liked-users) "
+				+ "VALUES ("+this.postID+","
+				+ this.username+","
+				+ this.text+","
+				+ this.photo+","
+				+ likeList+")";
+		
+		return query;
+	}
 }

@@ -3,6 +3,10 @@ package com.redstream.postmanagerservice;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.osgi.framework.BundleContext;
@@ -14,11 +18,32 @@ public class PostManagerImpl implements PostManager {
 	
 	private ArrayList<Post> postList;
 	private ServiceReference<?> cameraServiceReference;
-	CameraProvider cameraProvider;
+	private CameraProvider cameraProvider;
 	private BundleContext context = Activator.getContext();
+	//private Connection conn;
 	
-	public PostManagerImpl() {
+	private String GET_POSTS = "SELECT * FROM posts";
+	
+	public PostManagerImpl(/*Connection conn*/) {
 		this.postList = new ArrayList<>();
+		//this.conn = conn;
+		
+//		try {
+//			Statement stmt = conn.createStatement();
+//			ResultSet res = stmt.executeQuery(GET_POSTS);
+//			
+//			while(res.next()) {
+//				Post p = new Post(
+//						res.getInt(0), //post ID
+//						res.getString(2), //text
+//						res.getString(3), //photo
+//						res.getString(1), //user name
+//						res.getString(4)); //likes
+//				postList.add(p);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	@Override

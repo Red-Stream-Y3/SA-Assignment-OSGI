@@ -19,7 +19,7 @@ public class Activator implements BundleActivator {
 
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
-		
+		System.out.println("Post Consumer starting...");
 		//find the post manager service
 		postReference = context.getServiceReference(PostManager.class.getName());
 		PostManager postManager = (PostManager) context.getService(postReference);
@@ -27,7 +27,7 @@ public class Activator implements BundleActivator {
 		//TODO: get user name
 		userReference = context.getServiceReference(IUser.class.getName());
 		IUser user = (IUser) context.getService(userReference);
-		String username = "heehoo";//get
+		String username = "sam";//get
 		
 		//create consumer
 		Consumer currentConsumer = new Consumer(username, postManager);
