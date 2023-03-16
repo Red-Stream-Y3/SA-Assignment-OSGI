@@ -17,7 +17,7 @@ public class Activator implements BundleActivator {
 	// Start method
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
-		System.out.println("Message Producer Started!");
+		System.out.println("LOG - Message Producer Started!");
 		IMessage message = new MessageImpl();
 		serviceRegistration = bundleContext.registerService(IMessage.class.getName(), message, null);
 	}
@@ -25,7 +25,7 @@ public class Activator implements BundleActivator {
 	// Stop method
 	public void stop(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
-		System.out.println("Message Producer Stopped!");
+		System.out.println("LOG - Message Producer Stopped!");
 		serviceRegistration.unregister();
 	}
 

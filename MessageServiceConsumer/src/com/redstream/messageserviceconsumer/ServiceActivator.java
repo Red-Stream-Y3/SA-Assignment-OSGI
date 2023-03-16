@@ -23,7 +23,7 @@ public class ServiceActivator implements BundleActivator {
 		messageServiceReference = bundleContext.getServiceReference(IMessage.class.getName());
 		messageService = (IMessage) bundleContext.getService(messageServiceReference);
 
-		System.out.println("Message Consumer Started!");
+		System.out.println("LOG - Message Consumer Started!");
 
 		displayMessage(messageService);
 
@@ -37,12 +37,15 @@ public class ServiceActivator implements BundleActivator {
 
 		try {
 			inputLoop: while (true) {
-				System.out.println("\n-------Manage Messages-------\n");
-				System.out.println("1. Send message");
-				System.out.println("2. Delete message");
-				System.out.println("3. View All Messages");
-				System.out.println("4. Exit");
-				System.out.print("\nSelect an Option: ");
+				System.out.println("\n===================");
+				System.out.println(" Message Dashboard");
+				System.out.println("===================");
+				System.out.println("1. Send Message");
+				System.out.println("2. Delete Message");
+				System.out.println("3. Search Message");
+				System.out.println("4. View All Messages");
+				System.out.println("5. Exit");
+				System.out.print("Enter your choice: ");
 
 				option = reader.readLine();
 
@@ -56,12 +59,16 @@ public class ServiceActivator implements BundleActivator {
 					break;
 				}
 				case "3": {
-					message.viewAllMessages();
+					message.searchMessages();
 					break;
 				}
 				case "4": {
+					message.viewAllMessages();
+					break;
+				}
+				case "5": {
 					System.out.println("Terminating Program!\n");
-					break inputLoop;
+					System.exit(0);
 				}
 				default: {
 					System.out.println("Unexpected value: Enter 1/2/3 or leave empty to cancel\n");
