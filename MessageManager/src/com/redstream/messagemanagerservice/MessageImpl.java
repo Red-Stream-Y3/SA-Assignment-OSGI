@@ -3,31 +3,62 @@ package com.redstream.messagemanagerservice;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.redstream.smdatabase.*;
+
 public class MessageImpl implements IMessage {
+
+	private Connection connection = null;
+	private Statement statement = null;
+	private IDatabase database;
+	private ResultSet resultSet;
 
 	// ArrayList to store all messages
 	private ArrayList<Message> messageList = new ArrayList<Message>();
 	// BufferedReader object to read input from the user
 	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+	public MessageImpl() {
+		super();
+		database = (IDatabase) new SocialMediaDB();
+		connection = database.connection();
+	}
+
 	// Send message method
 	@Override
 	public void sendMessage() {
 
 		System.out.print("Enter Receiver Name: ");
+		// Create new message object and add it to the messageList
+		Message newMessage = new Message();
+
 		String receiver;
+
 		try {
 			receiver = reader.readLine();
+			newMessage.setReceiver(receiver);
 
 			if (receiver != null) {
 				System.out.print("Enter Message : ");
 				String message = reader.readLine();
 
-				// Create new message object and add it to the messageList
-				Message newMessage = new Message(messageList.size() + 1, receiver, message);
-				messageList.add(newMessage);
+				newMessage.setMessage(message);
+
+				String insertMessage = "INSERT INTO messages(receiver,message) " + "VALUES('"
+						+ newMessage.getReceiver() + "', '" + newMessage.getMessage() + "')";
+
+				try {
+					statement = connection.createStatement();
+					statement.executeUpdate(insertMessage);
+				} catch (SQLException exc) {
+					System.out.println(exc.getMessage());
+
+				}
 
 				System.out.println("\nMessage sent successfully!\n");
 			} else {
