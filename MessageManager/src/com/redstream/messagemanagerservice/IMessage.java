@@ -7,4 +7,5 @@ public interface IMessage {
 	
 	public void viewAllMessages();
 
+	public void searchMessages();
 }
