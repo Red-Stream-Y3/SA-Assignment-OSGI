@@ -22,9 +22,11 @@ public class Activator implements BundleActivator {
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {
-		Activator.context = null;
-		System.out.println("LOG - User Manager Service Stopped"); 
-		serviceRegistration.unregister(); // Unregister the service from OSGi framework
+	    Activator.context = null;
+	    System.out.println("LOG - User Manager Service Stopped");
+	    if (serviceRegistration != null) {
+	        serviceRegistration.unregister(); // Unregister the service from OSGi framework
+	    }
 	}
 	
 

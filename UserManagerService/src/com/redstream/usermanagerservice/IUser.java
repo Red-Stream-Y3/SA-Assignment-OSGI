@@ -2,10 +2,11 @@ package com.redstream.usermanagerservice;
 
 public interface IUser {
     public void addUser();
-    public void deleteUser();
+    public boolean deleteUser();
     public void updateUser();
     public void getUser();
     public void getAllUsers();
-    public User login(String username);
+    public boolean login();
+    public boolean logout();
     public String getCurrentUserName();
 }
