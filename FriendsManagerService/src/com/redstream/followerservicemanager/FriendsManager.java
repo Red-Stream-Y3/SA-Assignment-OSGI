@@ -4,8 +4,8 @@ public interface FriendsManager {
 	
 	public void addFriend();
 		
-	//public void removeFriend(String userName);
+	public void removeFriend();
 		
-	//public void viewAllFriends();
+	public void viewAllFriends();
 
 }
