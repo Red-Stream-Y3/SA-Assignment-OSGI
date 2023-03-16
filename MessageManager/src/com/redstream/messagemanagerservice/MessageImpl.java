@@ -18,8 +18,6 @@ public class MessageImpl implements IMessage {
 	private IDatabase database;
 	private ResultSet resultSet;
 
-	// ArrayList to store all messages
-	private ArrayList<Message> messageList = new ArrayList<Message>();
 	// BufferedReader object to read input from the user
 	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -49,8 +47,8 @@ public class MessageImpl implements IMessage {
 
 				newMessage.setMessage(message);
 
-				String insertMessage = "INSERT INTO messages(receiver,message) " + "VALUES('"
-						+ newMessage.getReceiver() + "', '" + newMessage.getMessage() + "')";
+				String insertMessage = "INSERT INTO messages(receiver,message) " + "VALUES('" + newMessage.getReceiver()
+						+ "', '" + newMessage.getMessage() + "')";
 
 				try {
 					statement = connection.createStatement();
@@ -78,36 +76,64 @@ public class MessageImpl implements IMessage {
 
 		viewAllMessages();
 
-		if (messageList.isEmpty()) {
-			System.out.println("You don't have any messages to delete\n");
-		} else {
-			System.out.print("\nEnter Message ID : ");
+		System.out.print("\nEnter Message ID : ");
 
-			String messageID;
+		String messageID;
+
+		try {
+			messageID = reader.readLine();
+
+			String deleteMessage = "DELETE FROM messages WHERE messageID='" + messageID + "' ";
 
 			try {
-				messageID = reader.readLine();
 
-				if (messageList.isEmpty()) {
-					System.out.println("You don't have any messages");
-				} else {
-					// Find the message with the given ID and remove it from the array list
-					for (Message message : messageList) {
-						if (String.valueOf(message.getMessageID()).equals(messageID)) {
-							messageList.remove(message);
-							System.out.println("Message deleted successfully!\n");
-						}
-					}
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+				statement = connection.createStatement();
+				statement.executeUpdate(deleteMessage);
+				System.out.println("Message deleted successfully!\n");
+
+			} catch (SQLException exc) {
+				System.out.println("Error with delete Message");
+				System.out.println(exc.getMessage());
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	// Get all messages
 	@Override
 	public void viewAllMessages() {
+		
+		// Create a new ArrayList to store all messages
+		ArrayList<Message> messageList = new ArrayList<Message>();
+
+		try {
+			statement = connection.createStatement();
+			String SelectAll = "SELECT * FROM messages";
+			resultSet = statement.executeQuery(SelectAll);
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+
+		try {
+			while (resultSet.next()) {
+
+				Message newMessage = new Message();
+				newMessage.setMessageID(resultSet.getInt("messageID"));
+				newMessage.setSender(resultSet.getString("sender"));
+				newMessage.setReceiver(resultSet.getString("receiver"));
+				newMessage.setMessage(resultSet.getString("message"));
+				messageList.add(newMessage);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// Print all messages
 		for (Message message : messageList) {
 			if (messageList.isEmpty()) {
 				System.out.println("You don't have any messages");
@@ -115,15 +141,7 @@ public class MessageImpl implements IMessage {
 				message.viewMessage();
 			}
 		}
+
 	}
 
-	// Message menu
-	private void printMessageMenu() {
-		System.out.println("\n-------Manage Messages-------\n");
-		System.out.println("1. Send message");
-		System.out.println("2. Delete message");
-		System.out.println("3. View All Messages");
-		System.out.println("4. Exit");
-		System.out.print("\nSelect an Option: ");
-	}
 }

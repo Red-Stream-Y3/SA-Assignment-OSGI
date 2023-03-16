@@ -24,7 +24,7 @@ public class SocialMediaDB implements IDatabase {
 		try {
 			Class.forName(driverName);
 			connection = DriverManager.getConnection(databaseConnectionLink, databaseUser, databasePassword);
-			System.out.println("Connected!");
+			System.out.println("Database Connected!");
 		} catch (ClassNotFoundException | SQLException e) {
 			System.out.println(e);
 		}
