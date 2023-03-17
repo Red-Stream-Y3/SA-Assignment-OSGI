@@ -1,7 +1,7 @@
 package com.redstream.followerservicemanager;
 
 import java.io.BufferedReader;
-import com.redstream.usermanagerservice.*;
+//import com.redstream.usermanagerservice.*;
 import databasecon.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class FriendsManagerImpl implements FriendsManager{
 	
