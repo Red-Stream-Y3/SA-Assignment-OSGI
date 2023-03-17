@@ -3,6 +3,7 @@ package com.redstream.postserviceconsumer;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
 import com.redstream.postmanagerservice.PostManager;
 import com.redstream.usermanagerservice.IUser;
@@ -12,6 +13,7 @@ public class Activator implements BundleActivator {
 	private static BundleContext context;
 	private ServiceReference<?> postReference;
 	private ServiceReference<?> userReference;
+	ServiceRegistration<?> serviceRegistration;
 
 	static BundleContext getContext() {
 		return context;
@@ -19,7 +21,7 @@ public class Activator implements BundleActivator {
 
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
-		System.out.println("Post Consumer starting...");
+		
 		//find the post manager service
 		postReference = context.getServiceReference(PostManager.class.getName());
 		PostManager postManager = (PostManager) context.getService(postReference);
@@ -29,10 +31,16 @@ public class Activator implements BundleActivator {
 		IUser user = (IUser) context.getService(userReference);
 		
 		//create consumer
-		Consumer currentConsumer = new Consumer(user, postManager);
+		PostConsumer currentConsumer = new PostConsumer(user, postManager);
+		
+		//register consumer
+		serviceRegistration = context.registerService(
+				PostConsumer.class.getName(), 
+				currentConsumer, 
+				null);
 		
 		//start consumer activity
-		currentConsumer.startMenu();
+		//currentConsumer.startMenu();
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {

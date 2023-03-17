@@ -3,6 +3,7 @@ package com.redstream.messageserviceconsumer;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
 import com.redstream.messagemanagerservice.IMessage;
 import com.redstream.usermanagerservice.IUser;
@@ -14,6 +15,7 @@ public class Activator implements BundleActivator {
 	// Declare service reference
 	private ServiceReference<?> messageReference;
 	private ServiceReference<?> userReference;
+	ServiceRegistration<?> registration;
 
 	static BundleContext getContext() {
 		return context;
@@ -31,10 +33,14 @@ public class Activator implements BundleActivator {
 		IUser user = (IUser) context.getService(userReference);
 
 		// create consumer
-		Consumer currentConsumer = new Consumer(user, postManager);
+		MessageConsumer currentConsumer = new MessageConsumer(user, postManager);
+		registration = context.registerService(
+				MessageConsumer.class.getName(), 
+				currentConsumer, 
+				null);
 
 		// start consumer activity
-		currentConsumer.startMenu();
+		//currentConsumer.startMenu();
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {

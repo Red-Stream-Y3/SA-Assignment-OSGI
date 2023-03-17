@@ -7,12 +7,12 @@ import java.io.InputStreamReader;
 import com.redstream.postmanagerservice.PostManager;
 import com.redstream.usermanagerservice.IUser;
 
-public class Consumer {
+public class PostConsumer {
 	private IUser userService;
 	private PostManager postManager;
 	private static String username;
 	
-	public Consumer(IUser userService, PostManager postManager) {
+	public PostConsumer(IUser userService, PostManager postManager) {
 		this.userService = userService;
 		this.postManager = postManager;
 		username = null;
@@ -35,14 +35,14 @@ public class Consumer {
 					case "1":{//create new post
 						//check if user is logged in
 						try {
-							Consumer.username = userService.getCurrentUserName();
+							PostConsumer.username = userService.getCurrentUserName();
 						} catch (NullPointerException e) {
 							System.out.println("Not logged in!");
 						}
 						
-						if(Consumer.username == null) {
+						if(PostConsumer.username == null) {
 							userService.login(); //user must login first
-							Consumer.username = userService.getCurrentUserName();
+							PostConsumer.username = userService.getCurrentUserName();
 						}
 						
 						//call new post method from post manager module
