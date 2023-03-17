@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,7 +30,7 @@ public class MessageImpl implements IMessage {
 
 	// Send message method
 	@Override
-	public void sendMessage() {
+	public void sendMessage(String username) {
 
 		System.out.print("Enter Receiver Name: ");
 		// Create new message object and add it to the messageList
@@ -47,8 +48,9 @@ public class MessageImpl implements IMessage {
 
 				newMessage.setMessage(message);
 
-				String insertMessage = "INSERT INTO messages(receiver,message) " + "VALUES('" + newMessage.getReceiver()
-						+ "', '" + newMessage.getMessage() + "')";
+				String insertMessage = "INSERT INTO messages(sender,receiver,message) " + "VALUES('"
+						+ username + "', '" + newMessage.getReceiver() + "', '" + newMessage.getMessage()
+						+ "')";
 
 				try {
 					statement = connection.createStatement();
@@ -104,7 +106,7 @@ public class MessageImpl implements IMessage {
 	// Get all messages
 	@Override
 	public void viewAllMessages() {
-		
+
 		// Create a new ArrayList to store all messages
 		ArrayList<Message> messageList = new ArrayList<Message>();
 
@@ -142,6 +144,34 @@ public class MessageImpl implements IMessage {
 			}
 		}
 
+	}
+
+	@Override
+	public void searchMessages() {
+
+		System.out.print("Search messages: ");
+		String message;
+
+		try {
+			message = reader.readLine();
+
+			try {
+				statement = connection.createStatement();
+				String sql = "SELECT * FROM messages WHERE message LIKE ?";
+				PreparedStatement statement = connection.prepareStatement(sql);
+				statement.setString(1, "%" + message + "%");
+				resultSet = statement.executeQuery();
+
+				while (resultSet.next()) {
+					System.out.println(resultSet.getString("receiver") + ": " + resultSet.getString("message"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("User can't be found");
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 }
