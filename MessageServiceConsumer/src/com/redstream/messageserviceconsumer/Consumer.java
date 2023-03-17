@@ -38,17 +38,17 @@ public class Consumer {
 				}
 				case "2": {
 					isLoggged();
-					message.deleteMessage();
+					message.deleteMessage(username);
 					break;
 				}
 				case "3": {
 					isLoggged();
-					message.searchMessages();
+					message.searchMessages(username);
 					break;
 				}
 				case "4": {
 					isLoggged();
-					message.viewAllMessages();
+					message.viewAllMessages(username);
 					break;
 				}
 				case "5": {

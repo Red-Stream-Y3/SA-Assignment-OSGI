@@ -26,7 +26,7 @@ public class Activator implements BundleActivator {
 		
 		messageReference = context.getServiceReference(IMessage.class.getName());
 		IMessage postManager = (IMessage) context.getService(messageReference);
-		
+
 		userReference = context.getServiceReference(IUser.class.getName());
 		IUser user = (IUser) context.getService(userReference);
 
@@ -39,6 +39,7 @@ public class Activator implements BundleActivator {
 
 	public void stop(BundleContext bundleContext) throws Exception {
 		Activator.context = null;
+		System.out.println("LOG - Message Consumer Stopped!");
 	}
 
 }
