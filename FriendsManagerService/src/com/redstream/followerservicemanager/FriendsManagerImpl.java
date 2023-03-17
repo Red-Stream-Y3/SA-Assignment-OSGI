@@ -1,6 +1,7 @@
 package com.redstream.followerservicemanager;
 
 import java.io.BufferedReader;
+import com.redstream.usermanagerservice.*;
 import databasecon.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,111 +18,127 @@ public class FriendsManagerImpl implements FriendsManager{
 	private Statement statement = null;
 	private IDatabase database;
 	private ResultSet resultSet;
-	
-	//Friends count
-	private int friendCount = 0;
-	
+
 	//Friends List
-	private ArrayList<User> friendList = new ArrayList<User>();
-	private ArrayList<String> getFriendList = new ArrayList<String>();
+	private ArrayList<String> getUserList = new ArrayList<String>();
+	
+	private String followerName;
+	//private IUser iUser = new UserImpl();
 	
 	public FriendsManagerImpl() {
 		super();
 		database = (IDatabase) new SocialMediaDB();
 		connection = database.connection();
+		followerName = "mary";
+				//iUser.getCurrentUserName();
 	}
 
 	@Override
 	public void addFriend() {
-		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		System.out.print("Enter User Name : ");
-		String user;
+		String getUsersQuery = "SELECT * FROM users";
 		
 		try {
-			user = reader.readLine();
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(getUsersQuery);
+			while(resultSet.next()) {
+				String userName = resultSet.getString("username");
+				getUserList.add(userName);	
+			}
+			
+			System.out.print("Enter User Name : ");
+			String user;
+			
+			try {
+				user = reader.readLine();
 
-				if (user != null && !user.trim().isEmpty()) {
-					User newFollower = new User(user);
-					friendList.add(newFollower);
-					friendCount ++ ;
+				if (user != null && !user.trim().isEmpty() && user != followerName) {
 					
-					String insertFriend = "INSERT INTO friendlist(username) " + "VALUES('"
-							+ newFollower.getUserName() + "')";
+					boolean isUserAvailble = getUserList.contains(user);
 					
-					try {
-						statement = connection.createStatement();
-						statement.executeUpdate(insertFriend);
-					} catch (SQLException exc) {
-						System.out.println(exc.getMessage());
-
+					if(isUserAvailble) {
+						String insertFriend = "INSERT INTO friendlist(followerName, friendName) " + "VALUES('"+ followerName + "' , '" + user + "')";
+						
+						try {
+							statement = connection.createStatement();
+							statement.executeUpdate(insertFriend);
+						} catch (SQLException exc) {
+							System.out.println(exc.getMessage());
+						}
+						System.out.println("\nYou are now friends with " + user);
+						
+					} else {
+						System.out.println("Cannot find a user! Check username again.");
 					}
-					
-					System.out.println("\nYou are now friends with " + user);
-	
 				} else {
 					System.out.println("Please enter a valid username\n");					
 				}
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		} catch (SQLException e) {
+			System.out.println("Database Connection Error!");
+			e.printStackTrace();
 		}
-		
 	}
 	
 	
 	@Override
 	public void viewAllFriends() {
+		ArrayList<Friend> getFriendList = new ArrayList<Friend>();
+		String getFriends = "SELECT * FROM friendlist WHERE followerName = '"+ followerName + "'";
 		
-		String getFriends = "SELECT * FROM friendlist";
-			try {
-				statement = connection.createStatement();
-				resultSet = statement.executeQuery(getFriends);
-				while(resultSet.next()) {
-					String friendName = resultSet.getString("username");
-					getFriendList.add(friendName);
+		System.out.println("\n-------Your Friend List-------\n");
+		
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(getFriends);
+			while(resultSet.next()) {
+				Friend friend = new Friend();
+				friend.setFriendName(resultSet.getString("friendName"));
+				friend.setFollowerName(followerName);
+				getFriendList.add(friend);		
 				}
-				
-				if(getFriendList.isEmpty()) {
-					System.out.println("You don't have any friends! Make your 1st friend now! ");
-				} else {
-					System.out.println("\n-------Your Friend List-------\n");
-					System.out.println("You have " + getFriendList.size() + " friends.");
-					
-					for(int i = 0; i < getFriendList.size(); i++) {
-							System.out.println(" " + (i+1) + "." + getFriendList.get(i));
-						}
-				}	
-			} catch (SQLException e) {
-				System.out.println("Error in Database Connection!");
-				e.printStackTrace();
+		} catch (SQLException e) {
+			System.out.println("Database Connection Error!");
+			e.printStackTrace();
+		}
+		
+		System.out.println("You have " + getFriendList.size() + " friends.");
+		
+		int i = 1 ;
+		for(Friend frnd : getFriendList) {
+			if(getFriendList.isEmpty()) {
+				System.out.println("You don't have any friends! Make your 1st friend now! ");
+			} else {
+				System.out.println(" " + i + "." + frnd.viewFriends());
+				i++;
 			}
+		}		
 	}
 
 	@Override
 	public void removeFriend() {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		
-		if(friendList.isEmpty()) {
-			System.out.println("You don't have any friends to unfriend");
-		} else {
+		String userN;
+	
 			viewAllFriends();
 			System.out.print("\nEnter username to unfriend : ");
-			String userN;
-			
+
 			try {
 				userN = reader.readLine();
-				Iterator<User> iterator = friendList.iterator();
-				 while (iterator.hasNext()) {
-				        User frnd = iterator.next();
-				        if (String.valueOf(frnd.getUserName()).equals(userN)) {
-				            iterator.remove();
-				            friendCount--;
-				            System.out.println("You are no longer friends with " + userN);
-				            return;
-				        }
-				    }
-				    System.out.println("Could not find a friend with the username " + "'" + userN + "'");
+				String removefriend = "DELETE FROM friendlist WHERE friendName='" + userN + "' AND followerName = '"+ followerName + "'";
+				
+				try {
+					statement = connection.createStatement();
+					statement.executeUpdate(removefriend);
+					System.out.println("You are no longer friends with " + userN + "\n");
+					
+				} catch (SQLException exc) {
+					System.out.println("Could not find a friend with the username " + "'" + userN + "'");
+					System.out.println(exc.getMessage());
+				}
+				    
 			}
 			 catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -129,7 +146,7 @@ public class FriendsManagerImpl implements FriendsManager{
 			}
 		
 		
-	}
+		
 	}
 	
 	
