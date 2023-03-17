@@ -49,7 +49,7 @@ public class MessageImpl implements IMessage {
 				newMessage.setMessage(message);
 
 				String insertMessage = "INSERT INTO messages(sender,receiver,message) " + "VALUES('"
-						+ newMessage.getSender() + "', '" + newMessage.getReceiver() + "', '" + newMessage.getMessage()
+						+ username + "', '" + newMessage.getReceiver() + "', '" + newMessage.getMessage()
 						+ "')";
 
 				try {
