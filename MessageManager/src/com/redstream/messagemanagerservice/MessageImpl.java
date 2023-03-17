@@ -30,7 +30,7 @@ public class MessageImpl implements IMessage {
 
 	// Send message method
 	@Override
-	public void sendMessage() {
+	public void sendMessage(String username) {
 
 		System.out.print("Enter Receiver Name: ");
 		// Create new message object and add it to the messageList
@@ -48,8 +48,9 @@ public class MessageImpl implements IMessage {
 
 				newMessage.setMessage(message);
 
-				String insertMessage = "INSERT INTO messages(receiver,message) " + "VALUES('" + newMessage.getReceiver()
-						+ "', '" + newMessage.getMessage() + "')";
+				String insertMessage = "INSERT INTO messages(sender,receiver,message) " + "VALUES('"
+						+ newMessage.getSender() + "', '" + newMessage.getReceiver() + "', '" + newMessage.getMessage()
+						+ "')";
 
 				try {
 					statement = connection.createStatement();

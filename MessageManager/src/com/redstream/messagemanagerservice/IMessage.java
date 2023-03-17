@@ -1,7 +1,7 @@
 package com.redstream.messagemanagerservice;
 
 public interface IMessage {
-	public void sendMessage();
+	public void sendMessage(String username);
 
 	public void deleteMessage();
 	
