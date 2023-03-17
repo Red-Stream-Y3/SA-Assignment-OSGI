@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PostServiceConsumer
 Bundle-SymbolicName: com.redstream.PostServiceConsumer
 Bundle-Version: 1.0.0.qualifier
+Export-Package: com.redstream.postserviceconsumer
 Bundle-Activator: com.redstream.postserviceconsumer.Activator
 Bundle-Vendor: REDSTREAM
 Bundle-RequiredExecutionEnvironment: JavaSE-17

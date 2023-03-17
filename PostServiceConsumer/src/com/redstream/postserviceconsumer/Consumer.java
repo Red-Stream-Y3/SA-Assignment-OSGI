@@ -78,7 +78,7 @@ public class Consumer {
 	private void displayMenu() {
 		System.out.println("\n~~~~~~~~~~Menu~~~~~~~~~");
 		System.out.println("1: Create post");
-		System.out.println("2: View my posts");
+		System.out.println("2: View all posts");
 		System.out.println("3: Delete post");
 		System.out.print("\nSelect option: ");
 	}
