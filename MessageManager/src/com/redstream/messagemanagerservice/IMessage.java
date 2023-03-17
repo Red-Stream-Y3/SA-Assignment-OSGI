@@ -3,9 +3,9 @@ package com.redstream.messagemanagerservice;
 public interface IMessage {
 	public void sendMessage(String username);
 
-	public void deleteMessage();
+	public void deleteMessage(String username);
 	
-	public void viewAllMessages();
+	public void viewAllMessages(String username);
 
-	public void searchMessages();
+	public void searchMessages(String username);
 }

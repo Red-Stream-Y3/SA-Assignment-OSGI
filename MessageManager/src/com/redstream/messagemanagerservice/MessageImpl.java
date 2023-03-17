@@ -73,10 +73,10 @@ public class MessageImpl implements IMessage {
 
 	// Delete message method
 	@Override
-	public void deleteMessage() {
+	public void deleteMessage(String username) {
 		System.out.println("\n-------Messages--------\n");
 
-		viewAllMessages();
+		viewAllMessages(username);
 
 		System.out.print("\nEnter Message ID : ");
 
@@ -85,7 +85,7 @@ public class MessageImpl implements IMessage {
 		try {
 			messageID = reader.readLine();
 
-			String deleteMessage = "DELETE FROM messages WHERE messageID='" + messageID + "' ";
+			String deleteMessage = "DELETE FROM messages WHERE sender='" + username + "' AND messageID='" + messageID + "' ";
 
 			try {
 
@@ -105,14 +105,14 @@ public class MessageImpl implements IMessage {
 
 	// Get all messages
 	@Override
-	public void viewAllMessages() {
+	public void viewAllMessages(String username) {
 
 		// Create a new ArrayList to store all messages
 		ArrayList<Message> messageList = new ArrayList<Message>();
 
 		try {
 			statement = connection.createStatement();
-			String SelectAll = "SELECT * FROM messages";
+			String SelectAll = "SELECT * FROM messages WHERE sender='" + username + "'";
 			resultSet = statement.executeQuery(SelectAll);
 
 		} catch (SQLException e) {
@@ -136,6 +136,7 @@ public class MessageImpl implements IMessage {
 		}
 
 		// Print all messages
+		System.out.println("\n------- Your Messages --------\n");
 		for (Message message : messageList) {
 			if (messageList.isEmpty()) {
 				System.out.println("You don't have any messages");
@@ -147,17 +148,18 @@ public class MessageImpl implements IMessage {
 	}
 
 	@Override
-	public void searchMessages() {
-
+	public void searchMessages(String username) {
 		System.out.print("Search messages: ");
 		String message;
 
 		try {
 			message = reader.readLine();
 
+			System.out.print("Search Result: " + message);
+			
 			try {
 				statement = connection.createStatement();
-				String sql = "SELECT * FROM messages WHERE message LIKE ?";
+				String sql = "SELECT * FROM messages WHERE sender='" + username + "' AND message LIKE ?";
 				PreparedStatement statement = connection.prepareStatement(sql);
 				statement.setString(1, "%" + message + "%");
 				resultSet = statement.executeQuery();
