@@ -26,12 +26,12 @@ public class ServiceActivator implements BundleActivator {
 		friendReference = context.getServiceReference(FriendsManager.class.getName());
 		friendManager = (FriendsManager) context.getService(friendReference);
 		
-		userReference = context.getServiceReference(IUser.class.getName());
-		IUser user = (IUser) context.getService(userReference);
+		//userReference = context.getServiceReference(IUser.class.getName());
+		//IUser user = (IUser) context.getService(userReference);
 		
 		System.out.println("Friends Consumer Started!");
 		
-		FollowerConsumer currentConsumer = new FollowerConsumer(friendManager, user);
+		FollowerConsumer currentConsumer = new FollowerConsumer(friendManager);
 		
 		
 		//start consumer

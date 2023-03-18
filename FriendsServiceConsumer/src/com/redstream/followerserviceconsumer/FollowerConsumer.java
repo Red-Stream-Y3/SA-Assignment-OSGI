@@ -4,19 +4,19 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import com.redstream.followerservicemanager.FriendsManager;
-import com.redstream.usermanagerservice.IUser;
+
 
 //import com.redstream.usermanagerservice.IUser;
 
 public class FollowerConsumer {
-	private IUser userService;
+	//private IUser userService;
 	private FriendsManager friendManager;
 	private static String username;
 	
-	
-	public FollowerConsumer( FriendsManager friendManager, IUser userService) {
+	//, IUser userService
+	public FollowerConsumer( FriendsManager friendManager) {
 		username = null;
-		this.userService = userService;
+		//this.userService = userService;
 		this.friendManager = friendManager;
 	}
 	
@@ -48,12 +48,8 @@ public class FollowerConsumer {
 					friendManager.viewAllFriends();
 					break;
 				}
+				
 				case "4": {
-					//isLoggged();
-					//friends.viewAllMessages();
-					break;
-				}
-				case "5": {
 					System.out.println("Terminating Program!\n");
 					break inputLoop;
 				}
@@ -74,8 +70,8 @@ public class FollowerConsumer {
 		System.out.println("1.Add New Friend");
 		System.out.println("2.Remove Friend");
 		System.out.println("3.View All Friends");
-		System.out.println("4.Message a Friend");
-		System.out.println("5.Exit");
+		//System.out.println("4.Message a Friend");
+		System.out.println("4.Exit");
 		System.out.print("\nSelect an Option: ");
 	}
 	
