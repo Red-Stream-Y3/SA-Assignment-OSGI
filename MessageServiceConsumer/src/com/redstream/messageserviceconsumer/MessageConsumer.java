@@ -7,12 +7,12 @@ import java.io.InputStreamReader;
 import com.redstream.messagemanagerservice.IMessage;
 import com.redstream.usermanagerservice.IUser;
 
-public class Consumer {
+public class MessageConsumer {
 	private IUser userService;
 	private IMessage message;
 	private static String username;
 
-	public Consumer(IUser userService, IMessage message) {
+	public MessageConsumer(IUser userService, IMessage message) {
 		this.userService = userService;
 		this.message = message;
 		username = null;
@@ -38,22 +38,22 @@ public class Consumer {
 				}
 				case "2": {
 					isLoggged();
-					message.deleteMessage();
+					message.deleteMessage(username);
 					break;
 				}
 				case "3": {
 					isLoggged();
-					message.searchMessages();
+					message.searchMessages(username);
 					break;
 				}
 				case "4": {
 					isLoggged();
-					message.viewAllMessages();
+					message.viewAllMessages(username);
 					break;
 				}
 				case "5": {
-					System.out.println("Terminating Program!\n");
-					System.exit(0);
+//					System.out.println("Terminating Program!\n");
+					break inputLoop;
 				}
 				default: {
 					System.out.println("Unexpected value: Enter 1/2/3/4 or leave empty to cancel\n");
@@ -81,14 +81,14 @@ public class Consumer {
 	private void isLoggged() {
 		// check if user is logged in
 		try {
-			Consumer.username = userService.getCurrentUserName();
+			MessageConsumer.username = userService.getCurrentUserName();
 		} catch (NullPointerException e) {
 			System.out.println("Not logged in!");
 		}
 
-		if (Consumer.username == null) {
+		if (MessageConsumer.username == null) {
 			userService.login(); // user must login first
-			Consumer.username = userService.getCurrentUserName();
+			MessageConsumer.username = userService.getCurrentUserName();
 		}
 	}
 }

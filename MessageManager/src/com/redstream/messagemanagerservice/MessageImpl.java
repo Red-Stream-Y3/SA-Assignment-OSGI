@@ -10,6 +10,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+
+import com.redstream.cameraprovider.CameraProvider;
 import com.redstream.smdatabase.*;
 
 public class MessageImpl implements IMessage {
@@ -18,6 +22,9 @@ public class MessageImpl implements IMessage {
 	private Statement statement = null;
 	private IDatabase database;
 	private ResultSet resultSet;
+	private ServiceReference<?> cameraServiceReference;
+	private CameraProvider cameraProvider;
+	private BundleContext context = Activator.getContext();
 
 	// BufferedReader object to read input from the user
 	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -37,6 +44,7 @@ public class MessageImpl implements IMessage {
 		Message newMessage = new Message();
 
 		String receiver;
+		String photo = "";
 
 		try {
 			receiver = reader.readLine();
@@ -48,9 +56,35 @@ public class MessageImpl implements IMessage {
 
 				newMessage.setMessage(message);
 
-				String insertMessage = "INSERT INTO messages(sender,receiver,message) " + "VALUES('"
-						+ username + "', '" + newMessage.getReceiver() + "', '" + newMessage.getMessage()
-						+ "')";
+				while (true) {
+					System.out.println("Do you need to attach a photo? (Yes/No)");
+					String answer = reader.readLine();
+
+					if (answer.equalsIgnoreCase("yes")) {
+						// get a photo from camera provider
+						System.out.println("\nCalling Camera Provider...");
+
+						// get camera provider service
+						cameraServiceReference = context.getServiceReference(CameraProvider.class.getName());
+						cameraProvider = (CameraProvider) context.getService(cameraServiceReference);
+						photo = cameraProvider.takePhoto();
+
+						// get text input for caption
+						System.out.println(photo);
+						System.out.println("Photo taken!");
+
+						// exit the loop
+						break;
+					} else if (answer.equalsIgnoreCase("no")) {
+						// exit the loop
+						break;
+					} else {
+						// ask the user to enter a valid input
+						System.out.println("Please enter 'Yes' or 'No'.");
+					}
+				}
+				String insertMessage = "INSERT INTO messages(sender,receiver,message, photo) " + "VALUES('" + username
+						+ "', '" + newMessage.getReceiver() + "', '" + newMessage.getMessage() + "', '" + photo + "')";
 
 				try {
 					statement = connection.createStatement();
@@ -73,10 +107,8 @@ public class MessageImpl implements IMessage {
 
 	// Delete message method
 	@Override
-	public void deleteMessage() {
-		System.out.println("\n-------Messages--------\n");
-
-		viewAllMessages();
+	public void deleteMessage(String username) {
+		viewAllMessages(username);
 
 		System.out.print("\nEnter Message ID : ");
 
@@ -85,7 +117,8 @@ public class MessageImpl implements IMessage {
 		try {
 			messageID = reader.readLine();
 
-			String deleteMessage = "DELETE FROM messages WHERE messageID='" + messageID + "' ";
+			String deleteMessage = "DELETE FROM messages WHERE sender='" + username + "' AND messageID='" + messageID
+					+ "' ";
 
 			try {
 
@@ -105,14 +138,14 @@ public class MessageImpl implements IMessage {
 
 	// Get all messages
 	@Override
-	public void viewAllMessages() {
+	public void viewAllMessages(String username) {
 
 		// Create a new ArrayList to store all messages
 		ArrayList<Message> messageList = new ArrayList<Message>();
 
 		try {
 			statement = connection.createStatement();
-			String SelectAll = "SELECT * FROM messages";
+			String SelectAll = "SELECT * FROM messages WHERE sender='" + username + "'";
 			resultSet = statement.executeQuery(SelectAll);
 
 		} catch (SQLException e) {
@@ -128,6 +161,7 @@ public class MessageImpl implements IMessage {
 				newMessage.setSender(resultSet.getString("sender"));
 				newMessage.setReceiver(resultSet.getString("receiver"));
 				newMessage.setMessage(resultSet.getString("message"));
+				newMessage.setPhoto(resultSet.getString("photo"));
 				messageList.add(newMessage);
 
 			}
@@ -136,6 +170,7 @@ public class MessageImpl implements IMessage {
 		}
 
 		// Print all messages
+		System.out.println("\n------- Your Messages --------\n");
 		for (Message message : messageList) {
 			if (messageList.isEmpty()) {
 				System.out.println("You don't have any messages");
@@ -147,23 +182,28 @@ public class MessageImpl implements IMessage {
 	}
 
 	@Override
-	public void searchMessages() {
-
+	public void searchMessages(String username) {
 		System.out.print("Search messages: ");
 		String message;
 
 		try {
 			message = reader.readLine();
 
+			System.out.print("Search Result: " + message + "\n");
+
 			try {
 				statement = connection.createStatement();
-				String sql = "SELECT * FROM messages WHERE message LIKE ?";
+				String sql = "SELECT * FROM messages WHERE sender='" + username + "' AND message LIKE ?";
 				PreparedStatement statement = connection.prepareStatement(sql);
 				statement.setString(1, "%" + message + "%");
 				resultSet = statement.executeQuery();
-
-				while (resultSet.next()) {
-					System.out.println(resultSet.getString("receiver") + ": " + resultSet.getString("message"));
+				
+				if (!resultSet.isBeforeFirst()) {
+					System.out.println("\nYou don't have any search result.");
+				} else {
+					while (resultSet.next()) {
+						System.out.println(" " + resultSet.getString("receiver") + ": " + resultSet.getString("message"));
+					}
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

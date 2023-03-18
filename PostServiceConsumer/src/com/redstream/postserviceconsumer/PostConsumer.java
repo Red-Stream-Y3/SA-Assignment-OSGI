@@ -7,13 +7,15 @@ import java.io.InputStreamReader;
 import com.redstream.postmanagerservice.PostManager;
 import com.redstream.usermanagerservice.IUser;
 
-public class Consumer {
+public class PostConsumer {
 	private IUser userService;
 	private PostManager postManager;
+	private static String username;
 	
-	public Consumer(IUser userService, PostManager postManager) {
+	public PostConsumer(IUser userService, PostManager postManager) {
 		this.userService = userService;
 		this.postManager = postManager;
+		username = null;
 	}
 	
 	public void startMenu() {
@@ -32,11 +34,15 @@ public class Consumer {
 				switch (inputString) {
 					case "1":{//create new post
 						//check if user is logged in
-						String username = userService.getCurrentUserName();
+						try {
+							PostConsumer.username = userService.getCurrentUserName();
+						} catch (NullPointerException e) {
+							System.out.println("Not logged in!");
+						}
 						
-						if(username == null) {
+						if(PostConsumer.username == null) {
 							userService.login(); //user must login first
-							username = userService.getCurrentUserName();
+							PostConsumer.username = userService.getCurrentUserName();
 						}
 						
 						//call new post method from post manager module
@@ -72,7 +78,7 @@ public class Consumer {
 	private void displayMenu() {
 		System.out.println("\n~~~~~~~~~~Menu~~~~~~~~~");
 		System.out.println("1: Create post");
-		System.out.println("2: View my posts");
+		System.out.println("2: View all posts");
 		System.out.println("3: Delete post");
 		System.out.print("\nSelect option: ");
 	}

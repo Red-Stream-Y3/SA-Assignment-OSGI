@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Userserviceconsumer
 Bundle-SymbolicName: com.redstream.userserviceconsumer
 Bundle-Version: 1.0.0.qualifier
+Export-Package: com.redstream.userserviceconsumer
 Bundle-Activator: com.redstream.userserviceconsumer.Activator
 Bundle-Vendor: REDSTREAM
 Bundle-RequiredExecutionEnvironment: JavaSE-17

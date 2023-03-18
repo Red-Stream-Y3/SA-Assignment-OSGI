@@ -11,7 +11,7 @@ import org.osgi.framework.ServiceRegistration;
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;
-	ServiceRegistration<?> serviceRegistration;
+	private ServiceRegistration<?> serviceRegistration;
 
 	static BundleContext getContext() {
 		return context;
