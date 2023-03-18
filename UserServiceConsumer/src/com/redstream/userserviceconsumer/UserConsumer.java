@@ -19,10 +19,6 @@ public class UserConsumer {
 		boolean loginStatus = false;
 		boolean logoutStatus = false;
 
-		while (loginStatus == false) {
-			loginStatus = userService.login();
-		}
-
 		inputLoop: while (true) {
 			System.out.println("==============");
 			System.out.println("User Dashboard");
