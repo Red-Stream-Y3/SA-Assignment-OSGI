@@ -1,7 +1,5 @@
 package com.redstream.userserviceconsumer;
 
-import java.util.Scanner;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -25,6 +23,15 @@ public class Activator implements BundleActivator {
 		
 		userServiceReference = bundleContext.getServiceReference(IUser.class.getName()); // Get service reference
 		IUser userService = (IUser) bundleContext.getService(userServiceReference); // Get service object
+		
+		//register user login 
+		UserLogin login = new UserLogin(userService);
+		serviceRegistration = context.registerService(
+				UserLogin.class.getName(), 
+				login, 
+				null);
+		
+		//login.showLoginCLI();
 		
 		//register user consumer
 		UserConsumer consumer = new UserConsumer(userService);

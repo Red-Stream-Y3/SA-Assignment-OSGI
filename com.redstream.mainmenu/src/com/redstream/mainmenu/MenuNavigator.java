@@ -10,6 +10,7 @@ import com.redstream.messageserviceconsumer.MessageConsumer;
 import com.redstream.postserviceconsumer.Activator;
 import com.redstream.postserviceconsumer.PostConsumer;
 import com.redstream.userserviceconsumer.UserConsumer;
+import com.redstream.userserviceconsumer.UserLogin;
 
 public class MenuNavigator {
 	BundleContext context;
@@ -23,6 +24,12 @@ public class MenuNavigator {
 		
 		Scanner scanner = new Scanner(System.in);
 		String inputString = "";
+
+		// implement login
+		// find user service
+		ServiceReference<?> loginReference = context.getServiceReference(UserLogin.class.getName());
+		UserLogin userLogin = (UserLogin) context.getService(loginReference);
+		userLogin.showLoginCLI();
 		
 		menuLoop: while(true) {
 			printMenu();
