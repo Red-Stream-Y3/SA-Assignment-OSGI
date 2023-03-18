@@ -107,6 +107,7 @@ public class UserImpl implements IUser {
                         statement = connection.createStatement();
                         String sql = "UPDATE users SET username = '" + newUsername + "' WHERE username = '" + name + "' AND password = '" + password + "'";
                         statement.executeUpdate(sql);
+                        currentUser.setUsername(newUsername);
                         System.out.println("Username Updated Successfully");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -120,6 +121,7 @@ public class UserImpl implements IUser {
                         statement = connection.createStatement();
                         String sql = "UPDATE users SET password = '" + newPassword + "' WHERE username = '" + name + "' AND password = '" + password + "'";
                         statement.executeUpdate(sql);
+                        currentUser.setPassword(newPassword);
                         System.out.println("Password Updated Successfully");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -133,6 +135,7 @@ public class UserImpl implements IUser {
                         statement = connection.createStatement();
                         String sql = "UPDATE users SET email = '" + newEmail + "' WHERE username = '" + name + "' AND password = '" + password + "'";
                         statement.executeUpdate(sql);
+                        currentUser.setEmail(newEmail);
                         System.out.println("Email Updated Successfully");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -146,6 +149,7 @@ public class UserImpl implements IUser {
                         statement = connection.createStatement();
                         String sql = "UPDATE users SET country = '" + newCountry + "' WHERE username = '" + name + "' AND password = '" + password + "'";
                         statement.executeUpdate(sql);
+                        currentUser.setCountry(newCountry);
                         System.out.println("Country Updated Successfully");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -159,6 +163,7 @@ public class UserImpl implements IUser {
                         statement = connection.createStatement();
                         String sql = "UPDATE users SET age = '" + newAge + "' WHERE username = '" + name + "' AND password = '" + password + "'";
                         statement.executeUpdate(sql);
+                        currentUser.setAge(newAge);
                         System.out.println("Age Updated Successfully");
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -228,6 +233,9 @@ public class UserImpl implements IUser {
             resultSet = statement.executeQuery(sql);
             if (resultSet.next()) {
                 currentUser = new User(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("email"), resultSet.getString("country"), resultSet.getInt("age"));
+                System.out.println("=============");
+                System.out.println("Login Success");
+                System.out.println("=============");
                 return true;
             }
         } catch (SQLException e) {
