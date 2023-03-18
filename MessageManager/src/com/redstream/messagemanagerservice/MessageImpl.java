@@ -189,7 +189,7 @@ public class MessageImpl implements IMessage {
 		try {
 			message = reader.readLine();
 
-			System.out.print("Search Result: " + message);
+			System.out.print("Search Result: " + message + "\n");
 
 			try {
 				statement = connection.createStatement();
@@ -202,7 +202,7 @@ public class MessageImpl implements IMessage {
 					System.out.println("\nYou don't have any search result.");
 				} else {
 					while (resultSet.next()) {
-						System.out.println("\n " + resultSet.getString("receiver") + ": " + resultSet.getString("message"));
+						System.out.println(" " + resultSet.getString("receiver") + ": " + resultSet.getString("message"));
 					}
 				}
 			} catch (SQLException e) {

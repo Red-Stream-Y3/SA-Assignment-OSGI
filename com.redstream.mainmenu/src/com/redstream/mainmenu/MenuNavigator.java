@@ -102,7 +102,7 @@ public class MenuNavigator {
 	
 	private void printMenu() {
 		System.out.println("\n~~~~~~REDSTREAM~~~~~~");
-		System.out.println("1. Login");
+		System.out.println("1. Profile");
 		System.out.println("2. Posts");
 		System.out.println("3. Friends");
 		System.out.println("4. Messages");

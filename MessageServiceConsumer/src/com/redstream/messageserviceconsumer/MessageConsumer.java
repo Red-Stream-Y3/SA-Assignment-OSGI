@@ -52,7 +52,7 @@ public class MessageConsumer {
 					break;
 				}
 				case "5": {
-					System.out.println("Terminating Program!\n");
+//					System.out.println("Terminating Program!\n");
 					break inputLoop;
 				}
 				default: {
