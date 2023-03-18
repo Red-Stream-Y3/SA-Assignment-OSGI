@@ -6,6 +6,7 @@ public class Message {
 	private String message;
 	private String sender;
 	private String receiver;
+	private String photo;
 
 	/**
 	 * @return the messageID
@@ -63,8 +64,22 @@ public class Message {
 		this.receiver = receiver;
 	}
 
+	/**
+	 * @return the photo
+	 */
+	public String getPhoto() {
+		return photo;
+	}
+
+	/**
+	 * @param photo the photo to set
+	 */
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
 	public void viewMessage() {
-		System.out.println(" " + messageID + ". " + receiver + ": " + message);
+		System.out.println(" " + messageID + ". " + receiver + ": " + message + " " + photo);
 	}
 
 }
