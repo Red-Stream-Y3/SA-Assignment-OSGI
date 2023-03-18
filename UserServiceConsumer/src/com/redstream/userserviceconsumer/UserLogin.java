@@ -14,14 +14,13 @@ public class UserLogin {
 
 	public void showLoginCLI() {
 		
-		System.out.println("=======");
-        System.out.println("Welcome");
-        System.out.println("=======");
+		System.out.println("===========");
+        System.out.println("  Welcome  ");
+        System.out.println("===========");
         System.out.println("1. Login");
         System.out.println("2. Register");
         System.out.println("3. Exit");
-		System.out.println("=======");
-		System.out.println("Enter your choice: ");
+		System.out.println("===========");
 
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();

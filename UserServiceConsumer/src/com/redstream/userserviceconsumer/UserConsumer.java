@@ -31,8 +31,7 @@ public class UserConsumer {
 			System.out.println("2. Edit Account");
 			System.out.println("3. Delete Account");
 			System.out.println("4. Search Users");
-			System.out.println("5. Register New User");
-			System.out.println("6. LogOut");
+			System.out.println("5. LogOut");
 			System.out.print("Enter your choice: ");
 			choice = scanner.nextInt();
 
@@ -50,9 +49,6 @@ public class UserConsumer {
 				userService.getAllUsers();
 				break;
 			case 5:
-				userService.addUser();
-				break;
-			case 6:
 				logoutStatus = userService.logout();
 				scanner.close();
 				System.exit(0);
@@ -60,6 +56,7 @@ public class UserConsumer {
 				System.out.println("Invalid choice");
 				break inputLoop;
 			}
+
 
 			if(logoutStatus == true) {
 				System.exit(0);
