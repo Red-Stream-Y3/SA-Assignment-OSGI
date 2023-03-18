@@ -1,23 +1,20 @@
 package com.redstream.followerserviceconsumer;
 
 import com.redstream.followerservicemanager.FriendsManager;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.redstream.usermanagerservice.IUser;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 
 public class ServiceActivator implements BundleActivator {
 
 	private static BundleContext context;
 	
 	private ServiceReference<?> friendReference;
+	private ServiceReference<?> userReference;
+	
 	private FriendsManager friendManager;
-	ServiceRegistration<?> registration;
 
 	static BundleContext getContext() {
 		return context;
@@ -29,21 +26,21 @@ public class ServiceActivator implements BundleActivator {
 		friendReference = context.getServiceReference(FriendsManager.class.getName());
 		friendManager = (FriendsManager) context.getService(friendReference);
 		
+		userReference = context.getServiceReference(IUser.class.getName());
+		IUser user = (IUser) context.getService(userReference);
+		
 		System.out.println("Friends Consumer Started!");
 		
-		//register friend consumer
-		FollowerConsumer consumer = new FollowerConsumer(friendManager);
-		registration = context.registerService(
-				FollowerConsumer.class.getName(), 
-				consumer, 
-				null);
+		FollowerConsumer currentConsumer = new FollowerConsumer(friendManager, user);
 		
-		//consumer.displayMenu();
+		
+		//start consumer
+		currentConsumer.displayMenu();
+		
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {
 		ServiceActivator.context = null;
-		
 		bundleContext.ungetService(friendReference);
 		System.out.println("Friends Consumer Stopped!");
 	}
