@@ -1,7 +1,7 @@
 # SA_Assignment1_OSGI
 Assignment 1 of Software Architecture module of Y3S1.
 <br />
-A simplified social media app made using the micro kernal architecture with eclipse OSGI and MySQl database.
+A simplified social media app made using the micro kernal architecture with eclipse OSGI and MySQL database.
 <br />
 <br />
 Group number – CSSE_WD_02
