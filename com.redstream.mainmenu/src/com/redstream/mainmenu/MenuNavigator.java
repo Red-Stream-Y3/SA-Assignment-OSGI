@@ -76,7 +76,7 @@ public class MenuNavigator {
 					FollowerConsumer followerConsumer = (FollowerConsumer) context.getService(friendsReference);
 					
 					//run friends consumer module
-					followerConsumer.displayMenu();
+					followerConsumer.startMenu();
 					break;
 				}
 				case "4": {//messages

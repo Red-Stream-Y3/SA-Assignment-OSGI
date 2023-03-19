@@ -2,6 +2,9 @@ package com.redstream.followerservicemanager;
 
 import java.io.BufferedReader;
 import com.redstream.smdatabase.*;
+import com.redstream.usermanagerservice.IUser;
+import com.redstream.usermanagerservice.UserImpl;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -21,18 +24,18 @@ public class FriendsManagerImpl implements FriendsManager{
 	//Friends List
 	private ArrayList<String> getUserList = new ArrayList<String>();
 	
-	private String followerName;
-	//private IUser iUser = new UserImpl();
+//	private String followerName;
+//	private IUser iUser = new UserImpl();
 	
 	public FriendsManagerImpl() {
 		super();
 		database = (IDatabase) new SocialMediaDB();
 		connection = database.connection();
-		followerName = "gwen";//iUser.getCurrentUserName();
+//		followerName = iUser.getCurrentUserName();
 	}
 
 	@Override
-	public void addFriend() {
+	public void addFriend(String follower) {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		String getUsersQuery = "SELECT * FROM users";
 		
@@ -50,12 +53,12 @@ public class FriendsManagerImpl implements FriendsManager{
 			try {
 				user = reader.readLine();
 
-				if (user != null && !user.trim().isEmpty() && user != followerName) {
+				if (user != null && !user.trim().isEmpty() && user != follower) {
 					
 					boolean isUserAvailble = getUserList.contains(user);
 					
 					if(isUserAvailble) {
-						String insertFriend = "INSERT INTO friendlist(followerName, friendName) " + "VALUES('"+ followerName + "' , '" + user + "')";
+						String insertFriend = "INSERT INTO friendlist(followerName, friendName) " + "VALUES('"+ follower + "' , '" + user + "')";
 						
 						try {
 							statement = connection.createStatement();
@@ -82,9 +85,9 @@ public class FriendsManagerImpl implements FriendsManager{
 	
 	
 	@Override
-	public void viewAllFriends() {
+	public void viewAllFriends(String follower) {
 		ArrayList<Friend> getFriendList = new ArrayList<Friend>();
-		String getFriends = "SELECT * FROM friendlist WHERE followerName = '"+ followerName + "'";
+		String getFriends = "SELECT * FROM friendlist WHERE followerName = '"+ follower + "'";
 		
 		System.out.println("\n-------Your Friend List-------\n");
 		
@@ -94,7 +97,7 @@ public class FriendsManagerImpl implements FriendsManager{
 			while(resultSet.next()) {
 				Friend friend = new Friend();
 				friend.setFriendName(resultSet.getString("friendName"));
-				friend.setFollowerName(followerName);
+				friend.setFollowerName(follower);
 				getFriendList.add(friend);		
 				}
 		} catch (SQLException e) {
@@ -116,16 +119,16 @@ public class FriendsManagerImpl implements FriendsManager{
 	}
 
 	@Override
-	public void removeFriend() {
+	public void removeFriend(String username) {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		String userN;
 	
-			viewAllFriends();
+			viewAllFriends(username);
 			System.out.print("\nEnter username to unfriend : ");
 
 			try {
 				userN = reader.readLine();
-				String removefriend = "DELETE FROM friendlist WHERE friendName='" + userN + "' AND followerName = '"+ followerName + "'";
+				String removefriend = "DELETE FROM friendlist WHERE friendName='" + userN + "' AND followerName = '"+ username + "'";
 				
 				try {
 					statement = connection.createStatement();

@@ -2,10 +2,10 @@ package com.redstream.followerservicemanager;
 
 public interface FriendsManager {
 	
-	public void addFriend();
+	public void addFriend(String username);
 		
-	public void removeFriend();
+	public void removeFriend(String username);
 		
-	public void viewAllFriends();
+	public void viewAllFriends(String username);
 
 }
